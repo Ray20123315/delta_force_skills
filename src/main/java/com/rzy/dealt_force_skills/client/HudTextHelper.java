@@ -13,6 +13,7 @@ final class HudTextHelper {
         if (text == null || text.isEmpty()) {
             return;
         }
+        text = keepReadable(font, text, width);
         int textWidth = font.width(text);
         if (textWidth <= width) {
             graphics.drawCenteredString(font, text, centerX, y, color);
@@ -25,6 +26,19 @@ final class HudTextHelper {
         poseStack.scale(scale, scale, 1.0F);
         graphics.drawString(font, text, -textWidth / 2, 0, color, false);
         poseStack.popPose();
+    }
+
+    // Do not shrink long names into unreadable specks in the in-game HUD.
+    private static String keepReadable(Font font, String text, int width) {
+        final float minimumScale = 0.70F;
+        final String ellipsis = "...";
+        int limit = Math.max(1, (int) (Math.max(1, width) / minimumScale));
+        if (font.width(text) <= limit) {
+            return text;
+        }
+        int prefixWidth = Math.max(1, limit - font.width(ellipsis));
+        String prefix = font.plainSubstrByWidth(text, prefixWidth);
+        return prefix.isEmpty() ? text.substring(0, 1) : prefix + ellipsis;
     }
 
     static void drawFitted(GuiGraphics graphics, Font font, String text,

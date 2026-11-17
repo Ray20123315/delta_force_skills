@@ -5,9 +5,9 @@ license="All Rights Reserved"
 [[mods]]
 modId="dealt_force_skills"
 version="${mod_version}"
-displayName="dealt_force_skills"
+displayName="Delta Force Skills"
 authors="RZY"
-description='''感谢您的游玩'''
+description='''A tactical character, equipment, and skills mod for Minecraft Forge.'''
 
 [[dependencies.dealt_force_skills]]
 modId="forge"

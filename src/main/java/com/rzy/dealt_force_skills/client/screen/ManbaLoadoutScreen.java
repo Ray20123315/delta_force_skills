@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -182,10 +183,12 @@ public class ManbaLoadoutScreen extends Screen {
         if (hit == null) {
             return;
         }
-        List<Component> lines = new ArrayList<>();
-        lines.add(Component.literal(optionName(hit.kind(), hit.index())));
-        lines.add(Component.translatable(descriptionKey(hit.kind(), hit.index())));
-        graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+        // Force long localized tooltips to wrap instead of bleeding off-screen.
+        int tooltipWidth = Math.max(48, Math.min(260, width - 40));
+        List<FormattedCharSequence> lines = new ArrayList<>();
+        lines.addAll(font.split(Component.literal(optionName(hit.kind(), hit.index())), tooltipWidth));
+        lines.addAll(font.split(Component.translatable(descriptionKey(hit.kind(), hit.index())), tooltipWidth));
+        graphics.renderTooltip(font, lines, mouseX, mouseY);
     }
 
     private OptionHit hoveredOption(double mouseX, double mouseY) {
